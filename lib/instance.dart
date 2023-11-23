@@ -157,7 +157,7 @@ class Instance {
 
 		this.exams.forEach( (key, value) {
 			for (int i = 0; i < value.length; i++) {
-				String examId = value[i].semester + "Unit" + value[i].unit.toString();
+				String examId = value[i].semester.replaceAll(" ", "")+ "Unit" + value[i].unit.toString();
 				String jsonString = jsonEncode(value[i]);
 				File examFile = File("$examsPath/$examId.json");
 				examFile.writeAsStringSync(jsonString);

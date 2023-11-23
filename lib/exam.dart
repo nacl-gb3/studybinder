@@ -30,6 +30,8 @@ class Exam {
 				index = rand.nextInt(this.questions.length);
 			}
 		}
+
+		user.updateAnsweredQuestions(this.toString(), index);
 	
 		return this.questions[index];
 	}
