@@ -107,8 +107,8 @@ class Instance {
 		int index = rand.nextInt(semesters.length);
 		String semester = semesters.elementAt(index);
 		int length = this.exams[semester]!.length;
-		int unit = rand.nextInt(length);
-		return this.exams[semester]![unit];
+		int examIndex = rand.nextInt(length);
+		return this.exams[semester]![examIndex];
 	}
 
 	int getExamCount() {
@@ -132,7 +132,11 @@ class Instance {
 			return 2;
 		}
 
-		this.activeExam = this.exams[semester]![unit-1];
+		for (int i = 0; i < this.exams[semester]!.length; i++) {
+			if (this.exams[semester]![i].unit == unit) {
+				this.activeExam = this.exams[semester]![i];
+			}
+		}
 
 		return 0;
 	}
