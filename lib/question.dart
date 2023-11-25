@@ -1,8 +1,9 @@
 import 'dart:math';
 
 class Question {
-	String examId = "";
-	int examNum = -1;
+	String examSemester = "";
+	int examUnit = -1;
+	int questionNum = -1;
 	String type = "";
 	String given = "";
 	String explanation = "";
