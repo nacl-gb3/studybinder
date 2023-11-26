@@ -4,21 +4,11 @@ class User {
 	int id = -1;
 	String password = "";
 	bool admin = false;
-	Map<String, List<int>> answeredQuestions = {};
+	bool excludeAnswered = true;
 
 	User(this.name, this.id, this.password, this.admin);
 
 	User.fromJson(Map data);
 
-	void updateAnsweredQuestions(String currentExam, int currentQuestion) {
-		if (!answeredQuestions.containsKey(currentExam)) {
-			answeredQuestions[currentExam] = [currentQuestion];
-		}
-		else {
-			answeredQuestions[currentExam]!.add(currentQuestion);
-		}
-
-		answeredQuestions[currentExam]!.sort();
-	}
 }
 

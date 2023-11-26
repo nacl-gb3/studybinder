@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'user.dart';
 
 class Question {
 	String examSemester = "";
@@ -9,6 +10,7 @@ class Question {
 	String explanation = "";
 	String answer = "";
 	List<String> possibleAnswers = [];
+	List<String> usersAnswered = [];
 
 	List<String>? shuffleAnswers() {
 		Random rand = Random();
@@ -28,6 +30,10 @@ class Question {
 		}
 
 		return shuffledList;
+	}
+
+	void updateUsersAnswered(User user) {
+		if (!usersAnswered.contains(user.name)) { usersAnswered.add(user.name);}
 	}
 }
 

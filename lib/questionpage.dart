@@ -85,6 +85,7 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 						_currentColorIndex[chosenOption] = 2;	
 						if (guesses >= answerList!.length - 1) {
 							_currentColorIndex[Instance.activeQuestion!.answer] = 1;
+							answerCorrect = true;
 						}
 					}
 
@@ -97,6 +98,9 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 					}
 					else {
 						currentColorIndex = 2;
+						if (guesses >= answerList!.length - 1) {
+							answerCorrect = true;
+						}
 					}
 				});
 			}

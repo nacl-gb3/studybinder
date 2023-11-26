@@ -11,27 +11,21 @@ class Exam {
 
 	Exam.fromJson(Map data); 
 
-	Question? getRandomQuestion(User user, Random rand, bool excludeAnswered) {
+	Question? getRandomQuestion(User user, bool excludeAnswered) {
+		Random rand = Random();
 		int index = -1;
-		List<int>? answeredQuestions;
+		List<int> attemptedIndexes = [];
 
-		if (!user.answeredQuestions.containsKey(this.toString())) {
-			return null;
-		} 
-
-		answeredQuestions = user.answeredQuestions[this.toString()];
-
-		if (answeredQuestions == null) {
-			return null;
-		}
-
-		if (excludeAnswered || answeredQuestions.length != this.questions.length) {
-			while (answeredQuestions.contains(index)) {
+		if (excludeAnswered) {
+			do {
 				index = rand.nextInt(this.questions.length);
-			}
+				if (!attemptedIndexes.contains(index)){
+					attemptedIndexes.add(index);
+				}
+			} while (questions[index].usersAnswered.contains(user.name) 
+			&& attemptedIndexes.length < this.questions.length);
 		}
 
-		user.updateAnsweredQuestions(this.toString(), index);
 	
 		return this.questions[index];
 	}

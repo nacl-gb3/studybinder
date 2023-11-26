@@ -14,7 +14,7 @@ class Instance {
 	static Question? activeQuestion;
 	static List<User> users = [];
 	static Map<String, List<Exam>> exams = {};
-	static bool excludeAnswered = true;
+	static List<Question> questions = [];
 
 	static onStart() {
 		//users = getUsers();
@@ -38,15 +38,17 @@ class Instance {
 		deactivateExam();
 	}
 
-	static Question? getRandomQuestion(User user, Random rand) {
-		Exam? exam;
+	static void getRandomQuestion(Random rand) {
+		List<int> attemptedIndexes = [];
 
 		do {
-			exam = getRandomExam(rand);
-		} while (excludeAnswered && user.answeredQuestions.length == getExamCount()
-		&& exam.questions.length == user.answeredQuestions[exam.toString()]!.length);	
+			int index = rand.nextInt(questions.length);
+			activeQuestion = questions[index];
+			if (!attemptedIndexes.contains(index)) {
+				attemptedIndexes.add(index);
+			}
+		} while (activeUser!.excludeAnswered && attemptedIndexes.length < questions.length);
 
-		return exam.getRandomQuestion(user, rand, excludeAnswered);
 	}
 
 	static Exam getRandomExam(Random rand) {

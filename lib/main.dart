@@ -112,10 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
 				padding: EdgeInsets.all(5.0),
 			),
 			ElevatedButton(
+				style: ElevatedButton.styleFrom(
+					backgroundColor: Colors.blue,
+				),
 				onPressed: () => {
 					_enterQuestionView(context),
 				},
-				child: const Text("Get a question"),
+				child: const Text(
+					"Get a question",
+					style: TextStyle(
+						color: Colors.white,
+					),
+				),
 			), // This trailing comma makes auto-formatting nicer for build methods.
           ],
         ),
