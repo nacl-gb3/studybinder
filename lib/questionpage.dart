@@ -13,56 +13,244 @@ class MyQuestionPage extends StatefulWidget {
 }
 
 class _MyQuestionPageState extends State<MyQuestionPage> {
-	Question? activeQuestion;
+	List<String>? answerList;
+	int guesses = 0;
+	bool answerCorrect = false;
+	TextEditingController textController = TextEditingController();
+
+	final List<Color> _colors = <Color>[
+		Colors.blue,
+		Colors.green,
+		Colors.red
+	];
+
+	final Map<String, int> _currentColorIndex = Map();
+	int currentColorIndex = 0;
 
 	@override
 	void initState() {
-		activeQuestion = Question();
-		activeQuestion!.examSemester = "Fall 2023";
-		activeQuestion!.examUnit = 2;
-		activeQuestion!.questionNum = 1;
-		activeQuestion!.type = "Multiple Choice";
-		activeQuestion!.given = "memes";
-		activeQuestion!.explanation = "no memes";
-		activeQuestion!.answer = "please";
-		activeQuestion!.possibleAnswers = ["please", "yes", "no", "get out of my house"];
+		Instance.activeQuestion = Question();
+		Instance.activeQuestion!.examSemester = "Fall 2023";
+		Instance.activeQuestion!.examUnit = 2;
+		Instance.activeQuestion!.questionNum = 1;
+		Instance.activeQuestion!.type = "Short Answer";
+		Instance.activeQuestion!.given = "memes";
+		Instance.activeQuestion!.explanation = "no memes";
+		Instance.activeQuestion!.answer = "please";
+		Instance.activeQuestion!.possibleAnswers = ["true", "false"];
+
+		for (String answer in Instance.activeQuestion!.possibleAnswers) {
+			_currentColorIndex[answer] = 0;
+		}
+
+		if (Instance.activeQuestion!.type == "Multiple Choice") {
+			answerList = Instance.activeQuestion!.shuffleAnswers();
+		}
+		else if (Instance.activeQuestion!.type == "True/False") {
+			answerList = Instance.activeQuestion!.possibleAnswers;
+		}
+		else {
+			answerList = [""];
+		}
+
 		super.initState();
 	}
 
 	@override
 	void dispose() {
-		activeQuestion = null;
+		Instance.activeQuestion = null;
+		_currentColorIndex.clear();
+		answerList = null;
+		answerCorrect = false;
 		super.dispose();
 	}
+
+	void _checkAnswer(String chosenOption) {
+		guesses++;
+
+		if (answerCorrect) {
+			return;
+		}
+
+		if (Instance.activeQuestion!.type != "Free Response") {
+			answerCorrect = chosenOption == Instance.activeQuestion!.answer;
+
+			if (Instance.activeQuestion!.type == "Multiple Choice" 
+				|| Instance.activeQuestion!.type == "True/False") {
+				setState( () {
+					if (answerCorrect) {
+						_currentColorIndex[chosenOption] = 1;
+					}
+					else {
+						_currentColorIndex[chosenOption] = 2;	
+						if (guesses >= answerList!.length - 1) {
+							_currentColorIndex[Instance.activeQuestion!.answer] = 1;
+						}
+					}
+
+				});
+			}
+			else {
+				setState( () {
+					if (answerCorrect) {
+						currentColorIndex = 1;
+					}
+					else {
+						currentColorIndex = 2;
+					}
+				});
+			}
+
+			if (answerCorrect || guesses >= answerList!.length - 1) {
+				displayExplanation("Answer: ${Instance.activeQuestion!.answer}");
+			}
+		}
+
+		else {
+			displayExplanation("Read the below explanation");
+		}
+
+	}
+
+	void displayExplanation(String header) {
+		showDialog(
+			context: context, 
+			builder: (_) => AlertDialog(
+				title: Text(header),
+				content: Text(Instance.activeQuestion!.explanation),
+				actions: [TextButton(onPressed: () {Navigator.pop(context);}, child: const Text("OK"))],
+			),
+			barrierDismissible: false,
+		);
+	}
+
+	Widget displayAnswerContainer(String option) {
+		if (Instance.activeQuestion!.type == "Free Response") {
+			return Container( 
+				color: Colors.white,
+				width: 400,
+				height: 200,
+				child: Column(
+					children: <Widget>[
+						Padding(
+							padding: const EdgeInsets.all(15.0),
+							child: SingleChildScrollView(
+								scrollDirection: Axis.vertical,
+								child: TextField(
+									controller: textController,
+									maxLines: 4,	
+								),
+							),
+						),
+						ElevatedButton(
+							style: ElevatedButton.styleFrom(
+								backgroundColor: Colors.blue,
+								minimumSize: const Size(300, 60),
+							),
+							onPressed: () => {
+								if (textController.text.isNotEmpty) {
+									_checkAnswer(textController.text)
+								}
+							}, 
+							child: const Text(
+								"Submit answer",
+								style: TextStyle(
+									color: Colors.white,
+								),
+							),
+						),
+					],
+				),
+			);
+
+		}
+
+		if (Instance.activeQuestion!.type == "Short Answer") {
+			return Container( 
+				color: Colors.white,
+				width: 400,
+				height: 200,
+				child: Column(
+					children: <Widget>[
+						Padding(
+							padding: const EdgeInsets.all(15.0),
+							child: TextField(
+								controller: textController,
+								maxLines: 1,	
+							),
+						),
+						ElevatedButton(
+							style: ElevatedButton.styleFrom(
+								backgroundColor: _colors[currentColorIndex],
+								minimumSize: const Size(300, 60),
+							),
+							onPressed: () => {
+								if (textController.text.isNotEmpty) {
+									_checkAnswer(textController.text)
+								}
+							}, 
+							child: const Text(
+								"Submit answer",
+								style: TextStyle(
+									color: Colors.white,
+								),
+							),
+						),
+					],
+				),
+			);
+		}
+		
+		return Container(
+			margin: const EdgeInsets.all(10),
+			child: ElevatedButton(
+				style: ElevatedButton.styleFrom(
+					backgroundColor: _colors[_currentColorIndex[option]!],
+					minimumSize: const Size(300, 60),
+				),
+				child: Text(
+					option,
+					style: const TextStyle(
+						color: Colors.white,
+					),
+				),
+				onPressed: () => _checkAnswer(option)
+			),
+		);
+}
 
 	@override
 	Widget build(BuildContext context) {
 
 		return Scaffold(
-		appBar: AppBar(
-			backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-			title: Text("${activeQuestion!.examSemester}, Exam ${activeQuestion!.examUnit}, "
-				+ "Q${activeQuestion!.questionNum}"),
-		),
-		body: Center(
-			child: Column(
-			mainAxisAlignment: MainAxisAlignment.center,
-			children: <Widget>[
-				const Text(
-				"Not ready for you yet, but go ahead and press the button since you came:",
-				),
-				Text(
-				'memes',
-				style: Theme.of(context).textTheme.headlineMedium,
-				),
-			],
+			appBar: AppBar(
+				backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+				title: Text("${Instance.activeQuestion!.examSemester}, " 
+				"Exam ${Instance.activeQuestion!.examUnit}, Q${Instance.activeQuestion!.questionNum}"),
 			),
-		),
-		floatingActionButton: FloatingActionButton(
-			onPressed: () => {},
-			tooltip: 'Increment',
-			child: const Icon(Icons.add),
-		), // This trailing comma makes auto-formatting nicer for build methods.
+			body: Center(
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: <Widget>[
+						Container(
+							color: Colors.cyan,
+							width: 400,
+							height: 200,
+							child: Center(
+								child: Text(
+									Instance.activeQuestion!.given,
+									textAlign: TextAlign.center,
+									style: const TextStyle(
+										color: Colors.black,
+									),
+								),
+							),
+						),
+						for (String option in answerList!) 
+							displayAnswerContainer(option),
+					],
+				),
+			),
 		);
 	}
 }

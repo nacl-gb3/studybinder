@@ -11,6 +11,7 @@ import 'paths.dart';
 class Instance {
 	static User? activeUser;
 	static Exam? activeExam;
+	static Question? activeQuestion;
 	static List<User> users = [];
 	static Map<String, List<Exam>> exams = {};
 	static bool excludeAnswered = true;
