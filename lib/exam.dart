@@ -9,8 +9,6 @@ class Exam {
 
 	//Exam(this.semester, this.unit, this.questions);
 
-	Exam.fromJson(Map data); 
-
 	Question? getRandomQuestion(User user, bool excludeAnswered) {
 		Random rand = Random();
 		int index = -1;

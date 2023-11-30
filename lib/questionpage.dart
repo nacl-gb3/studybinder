@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'instance.dart';
-import 'question.dart';
 
 class MyQuestionPage extends StatefulWidget {
   const MyQuestionPage({super.key, required this.title});
@@ -29,15 +28,7 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 
 	@override
 	void initState() {
-		Instance.activeQuestion = Question();
-		Instance.activeQuestion!.examSemester = "Fall 2023";
-		Instance.activeQuestion!.examUnit = 2;
-		Instance.activeQuestion!.questionNum = 1;
-		Instance.activeQuestion!.type = "Short Answer";
-		Instance.activeQuestion!.given = "memes";
-		Instance.activeQuestion!.explanation = "no memes";
-		Instance.activeQuestion!.answer = "please";
-		Instance.activeQuestion!.possibleAnswers = ["true", "false"];
+		Instance.setRandomQuestion();
 
 		for (String answer in Instance.activeQuestion!.possibleAnswers) {
 			_currentColorIndex[answer] = 0;

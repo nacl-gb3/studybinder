@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'user.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 class Question {
 	String examSemester = "";
@@ -11,6 +12,24 @@ class Question {
 	String answer = "";
 	List<String> possibleAnswers = [];
 	List<String> usersAnswered = [];
+
+	Question();
+
+	Question.fromSQL(Row questionSQL) {
+		this.examSemester = questionSQL["examSemester"];
+		this.examUnit = questionSQL["examUnit"];
+		this.questionNum = questionSQL["questionNum"];
+		this.type = questionSQL["type"];
+		this.given = questionSQL["given"];
+		this.explanation = questionSQL["explanation"];
+		this.answer = questionSQL["answer"];
+		this.possibleAnswers = csvToList(questionSQL["possibleAnswers"]);
+		this.usersAnswered = csvToList(questionSQL["usersAnswered"]);
+	}
+
+	List<String> csvToList(String csv) {
+		return csv.split(",");
+	}
 
 	List<String>? shuffleAnswers() {
 		Random rand = Random();
@@ -32,9 +51,14 @@ class Question {
 		return shuffledList;
 	}
 
-	void updateUsersAnswered(User user) {
-		if (!usersAnswered.contains(user.name)) { usersAnswered.add(user.name);}
+	void updateUsersAnswered(User user, Database db) {
+		if (!usersAnswered.contains(user.name)) { 
+			usersAnswered.add(user.name);
+		}
 	}
+
+	
+
 }
 
 

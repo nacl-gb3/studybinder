@@ -3,9 +3,7 @@ import 'instance.dart';
 import 'questionpage.dart';
 
 void main() {
-	Instance.onStart();
 	runApp(const MyApp());
-	Instance.onClose();
 }
 
 class MyApp extends StatelessWidget {
@@ -66,6 +64,18 @@ class _MyHomePageState extends State<MyHomePage> {
 				builder: (_) => const MyQuestionPage(title: "Question Page"),
 			),
 		);
+	}
+
+	@override
+	void initState() {
+		Instance.setCourseDatabase();
+		super.initState();
+	}
+
+	@override
+	void dispose() {
+		Instance.onClose();
+		super.dispose();
 	}
 
 	@override

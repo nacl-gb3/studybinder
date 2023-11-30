@@ -2,7 +2,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'init.dart';
+import 'package:sqlite3/sqlite3.dart';
+import 'sqlite.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
@@ -12,13 +13,27 @@ class Instance {
 	static User? activeUser;
 	static Exam? activeExam;
 	static Question? activeQuestion;
+	static String? activeCourse = "1337";
+	static Database? activeCourseDB;
 	static List<User> users = [];
 	static Map<String, List<Exam>> exams = {};
 	static List<Question> questions = [];
 
-	static onStart() {
-		//users = getUsers();
-		//exams = getExams();
+	static void setCourseDatabase() {
+		if (activeCourseDB != null) {
+			activeCourseDB!.dispose();
+		}
+
+		activeCourseDB = getDatabase(activeCourse!);
+
+		if (activeCourseDB == null) {
+			throw const FileSystemException("Database not found");
+		}
+	}
+
+	static void setRandomQuestion() {
+		//activeQuestion = getRandomQuestion(activeUser!, activeCourseDB!);	
+		activeQuestion = getRandomQuestion(User.dummy(), activeCourseDB!);	
 	}
 
 	static bool userLogIn(String username, int id, String password) {
@@ -36,19 +51,6 @@ class Instance {
 	static void userLogOut() {
 		activeUser = null;
 		deactivateExam();
-	}
-
-	static void getRandomQuestion(Random rand) {
-		List<int> attemptedIndexes = [];
-
-		do {
-			int index = rand.nextInt(questions.length);
-			activeQuestion = questions[index];
-			if (!attemptedIndexes.contains(index)) {
-				attemptedIndexes.add(index);
-			}
-		} while (activeUser!.excludeAnswered && attemptedIndexes.length < questions.length);
-
 	}
 
 	static Exam getRandomExam(Random rand) {
@@ -101,22 +103,7 @@ class Instance {
 	}
 
 	static int onClose() {
-		for (int i = 0; i < users.length; i++) {
-			String username = users[i].name;
-			String jsonString = jsonEncode(users[i]);
-			File userFile = File("$usersPath/$username.json");
-			userFile.writeAsStringSync(jsonString);
-		}
-
-		exams.forEach( (key, value) {
-			for (int i = 0; i < value.length; i++) {
-				String examId = value[i].semester.replaceAll(" ", "")+ "Unit" + value[i].unit.toString();
-				String jsonString = jsonEncode(value[i]);
-				File examFile = File("$examsPath/$examId.json");
-				examFile.writeAsStringSync(jsonString);
-			}
-		});
-
+		activeCourseDB!.dispose();
 		return 0;
 	}
 
