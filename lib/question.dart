@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:drift/drift.dart';
 import 'user.dart';
-import 'package:sqlite3/common.dart';
 
 class Question {
 	String examSemester = "";
@@ -56,9 +56,8 @@ class Question {
 			usersAnswered.add(user.name);
 		}
 	}
-
-	
-
 }
+
+
 
 
