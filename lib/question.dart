@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'user.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite3/common.dart';
 
 class Question {
 	String examSemester = "";
@@ -51,7 +51,7 @@ class Question {
 		return shuffledList;
 	}
 
-	void updateUsersAnswered(User user, Database db) {
+	void updateUsersAnswered(User user, CommonDatabase db) {
 		if (!usersAnswered.contains(user.name)) { 
 			usersAnswered.add(user.name);
 		}

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite3/common.dart';
 import 'sqlite.dart';
 import 'user.dart';
 import 'exam.dart';
@@ -14,7 +14,7 @@ class Instance {
 	static Exam? activeExam;
 	static Question? activeQuestion;
 	static String? activeCourse = "1337";
-	static Database? activeCourseDB;
+	static CommonDatabase? activeCourseDB;
 	static List<User> users = [];
 	static Map<String, List<Exam>> exams = {};
 	static List<Question> questions = [];
