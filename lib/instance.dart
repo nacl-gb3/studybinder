@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:sqlite3/common.dart';
 import 'sqlite.dart';
+import 'localsqlite.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
-import 'paths.dart';
 
 class Instance {
 	static User? activeUser;

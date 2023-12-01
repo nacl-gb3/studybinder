@@ -1,22 +1,6 @@
-import 'dart:io';
 import 'package:sqlite3/common.dart';
-import 'package:sqlite3/sqlite3.dart';
-//import 'package:sqlite3/wasm.dart';
 import 'user.dart';
 import 'question.dart';
-
-CommonDatabase? getDatabase(String dbName) {
-	String courseFilePath = "databases/$dbName.db";
-	File f = File(courseFilePath);
-
-	if (!f.existsSync()) {
-		return null;
-	}
-
-	CommonDatabase db = sqlite3.open(courseFilePath);
-
-	return db;
-}
 
 Question getRandomQuestion(User user, CommonDatabase db) {
 	ResultSet questionEntries = db.select("SELECT * from questions ORDER BY RANDOM()");	
