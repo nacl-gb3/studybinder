@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:drift/drift.dart';
 import 'user.dart';
 
 class Question {

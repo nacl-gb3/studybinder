@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'sqlite.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
