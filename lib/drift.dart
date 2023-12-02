@@ -1,16 +1,20 @@
-import 'package:drift/drift.dart';
+import 'dart:math';
 import 'user.dart';
 import 'question.dart';
+import 'appdb.dart';
 
-Question getRandomQuestion(User user, CommonDatabase db) {
-	ResultSet questionEntries = db.select("SELECT * from questions ORDER BY RANDOM()");	
+Future<Question> getRandomQuestion(User user, AppDatabase db) async {
+	List<QuestionEntry> questionEntries = await db.select(db.questions).get();
+	Random rand = Random();
 
 	List<Question> questions = [];
 
-	for (int i = 0; i < questionEntries.length; i++) {
-		Row questionEntry = questionEntries.elementAt(i);
-		Question question = Question.fromSQL(questionEntry);
+	while (questionEntries.isNotEmpty) {
+		int randomIndex = rand.nextInt(questionEntries.length);
+		QuestionEntry questionEntry = questionEntries[randomIndex];
+		Question question = Question.fromDB(questionEntry);
 		questions.add(question);
+		questionEntries.removeAt(randomIndex);
 	}
 
 	int index = 0;
@@ -18,3 +22,4 @@ Question getRandomQuestion(User user, CommonDatabase db) {
 
 	return questions[index];
 }
+
