@@ -30,7 +30,6 @@ class Instance {
 	}
 
 	static Future<void> setRandomQuestion() async {
-		//activeQuestion = getRandomQuestion(activeUser!, activeCourseDB!);	
 		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
 	}
 

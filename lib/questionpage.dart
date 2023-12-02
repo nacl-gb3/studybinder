@@ -12,6 +12,7 @@ class MyQuestionPage extends StatefulWidget {
 }
 
 class _MyQuestionPageState extends State<MyQuestionPage> {
+	bool questionActive = false;
 	List<String>? answerList;
 	int guesses = 0;
 	bool answerCorrect = false;
@@ -28,7 +29,15 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 
 	@override
 	void initState() {
-		Instance.setRandomQuestion();
+		super.initState();
+	}
+
+	Future<bool> initQuestion() async {
+		if (questionActive) {
+			return true;
+		}
+
+		await Instance.setRandomQuestion();
 
 		for (String answer in Instance.activeQuestion!.possibleAnswers) {
 			_currentColorIndex[answer] = 0;
@@ -44,7 +53,8 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 			answerList = [""];
 		}
 
-		super.initState();
+		questionActive = true;
+		return questionActive;
 	}
 
 	@override
@@ -53,6 +63,7 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 		_currentColorIndex.clear();
 		answerList = null;
 		answerCorrect = false;
+		questionActive = false;
 		super.dispose();
 	}
 
@@ -217,6 +228,20 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 	@override
 	Widget build(BuildContext context) {
 
+		return FutureBuilder<bool>(
+			future: initQuestion(),
+			builder: (context, AsyncSnapshot<bool> snapshot) {
+				if (snapshot.hasData) {
+					return getScaffold();
+				}
+				else {
+					return const CircularProgressIndicator();
+				}
+			}
+		);
+	}
+
+	Widget getScaffold() {
 		return Scaffold(
 			appBar: AppBar(
 				backgroundColor: Theme.of(context).colorScheme.inversePrimary,
