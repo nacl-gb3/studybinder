@@ -9,6 +9,8 @@ class User {
 
 	User.dummy();
 
-
+	User.fromTable() {}
 }
+
+
 

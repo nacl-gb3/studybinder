@@ -1,6 +1,8 @@
+import 'package:drift/drift.dart';
 import 'dart:math';
+import 'appdb.dart';
+import 'tables.dart';
 import 'user.dart';
-import 'package:sqlite3/common.dart';
 
 class Question {
 	String examSemester = "";
@@ -15,16 +17,16 @@ class Question {
 
 	Question();
 
-	Question.fromSQL(Row questionSQL) {
-		this.examSemester = questionSQL["examSemester"];
-		this.examUnit = questionSQL["examUnit"];
-		this.questionNum = questionSQL["questionNum"];
-		this.type = questionSQL["type"];
-		this.given = questionSQL["given"];
-		this.explanation = questionSQL["explanation"];
-		this.answer = questionSQL["answer"];
-		this.possibleAnswers = csvToList(questionSQL["possibleAnswers"]);
-		this.usersAnswered = csvToList(questionSQL["usersAnswered"]);
+	Question.fromDB(QuestionEntry questionEntry) {
+		this.examSemester = questionEntry.examSemester;
+		this.examUnit = questionEntry.examUnit;
+		this.questionNum = questionEntry.questionNum;
+		this.type = questionEntry.type;
+		this.given = questionEntry.given;
+		this.explanation = questionEntry.explanation;
+		this.answer = questionEntry.answer;
+		this.possibleAnswers = csvToList(questionEntry.possibleAnswers);
+		this.usersAnswered = csvToList(questionEntry.usersAnswered);
 	}
 
 	List<String> csvToList(String csv) {
@@ -51,14 +53,13 @@ class Question {
 		return shuffledList;
 	}
 
-	void updateUsersAnswered(User user, CommonDatabase db) {
+	void updateUsersAnswered(User user, AppDatabase db) {
 		if (!usersAnswered.contains(user.name)) { 
 			usersAnswered.add(user.name);
 		}
 	}
-
-	
-
 }
+
+
 
 

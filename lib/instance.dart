@@ -2,38 +2,42 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:sqlite3/common.dart';
-import 'sqlite.dart';
+import 'package:flutter/foundation.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
-import 'paths.dart';
+import 'appdb.dart';
+import 'fill_db.dart';
+import 'drift.dart';
 
 class Instance {
 	static User? activeUser;
 	static Exam? activeExam;
 	static Question? activeQuestion;
-	static String? activeCourse = "1337";
-	static CommonDatabase? activeCourseDB;
+	static AppDatabase? activeCourseDB;
 	static List<User> users = [];
 	static Map<String, List<Exam>> exams = {};
 	static List<Question> questions = [];
 
 	static void setCourseDatabase() {
 		if (activeCourseDB != null) {
-			activeCourseDB!.dispose();
+			activeCourseDB!.close();
 		}
 
-		activeCourseDB = getDatabase(activeCourse!);
+		activeCourseDB = AppDatabase();
 
 		if (activeCourseDB == null) {
 			throw const FileSystemException("Database not found");
 		}
+
+		print(kIsWeb);
+		if (kIsWeb) {
+			fillWebAppDB(activeCourseDB!);
+		}
 	}
 
-	static void setRandomQuestion() {
-		//activeQuestion = getRandomQuestion(activeUser!, activeCourseDB!);	
-		activeQuestion = getRandomQuestion(User.dummy(), activeCourseDB!);	
+	static Future<void> setRandomQuestion() async {
+		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
 	}
 
 	static bool userLogIn(String username, int id, String password) {
@@ -103,7 +107,7 @@ class Instance {
 	}
 
 	static int onClose() {
-		activeCourseDB!.dispose();
+		activeCourseDB!.close();
 		return 0;
 	}
 
