@@ -22,13 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+// COME BACK TO MAYBE
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 
 DatabaseConnection connect(String courseName) {
   return DatabaseConnection.delayed(Future(() async {
     final result = await WasmDatabase.open(
-      databaseName: '${courseName}_db', // prefer to only use valid identifiers here
+      databaseName: courseName, // prefer to only use valid identifiers here
       sqlite3Uri: Uri.parse('sqlite3.wasm'),
       driftWorkerUri: Uri.parse('drift_worker.dart.js'),
     );

@@ -454,11 +454,11 @@ class $QuestionsTable extends Questions
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return QuestionEntry(
       examSemester: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}examSemester'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}exam_semester'])!,
       examUnit: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}examUnit'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}exam_unit'])!,
       questionNum: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}questionNum'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}question_num'])!,
       type: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       given: attachedDatabase.typeMapping
@@ -468,9 +468,9 @@ class $QuestionsTable extends Questions
       answer: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}answer'])!,
       possibleAnswers: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}possibleAnswers'])!,
+          DriftSqlType.string, data['${effectivePrefix}possible_answers'])!,
       usersAnswered: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}usersAnswered'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}users_answered'])!,
     );
   }
 

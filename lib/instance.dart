@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
 import 'appdb.dart';
+import 'fill_db.dart';
 import 'drift.dart';
 
 class Instance {
@@ -26,6 +28,11 @@ class Instance {
 
 		if (activeCourseDB == null) {
 			throw const FileSystemException("Database not found");
+		}
+
+		print(kIsWeb);
+		if (kIsWeb) {
+			fillWebAppDB(activeCourseDB!);
 		}
 	}
 
