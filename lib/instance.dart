@@ -16,8 +16,6 @@ class Instance {
 	static Question? activeQuestion;
 	static AppDatabase? activeCourseDB;
 	static List<User> users = [];
-	static Map<String, List<Exam>> exams = {};
-	static List<Question> questions = [];
 
 	static void setCourseDatabase() {
 		if (activeCourseDB != null) {
@@ -30,14 +28,18 @@ class Instance {
 			throw const FileSystemException("Database not found");
 		}
 
-		print(kIsWeb);
 		if (kIsWeb) {
 			fillWebAppDB(activeCourseDB!);
 		}
 	}
 
 	static Future<void> setRandomQuestion() async {
-		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
+		//if (!kIsWeb) {
+		activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!);	
+		//}
+		//else {
+		// HTTP Stuff
+		//}
 	}
 
 	static bool userLogIn(String username, int id, String password) {
@@ -57,42 +59,8 @@ class Instance {
 		deactivateExam();
 	}
 
-	static Exam getRandomExam(Random rand) {
-		Iterable<String> semesters = exams.keys;
-		int index = rand.nextInt(semesters.length);
-		String semester = semesters.elementAt(index);
-		int length = exams[semester]!.length;
-		int examIndex = rand.nextInt(length);
-		return exams[semester]![examIndex];
-	}
-
-	static int getExamCount() {
-		int count = 0;
-
-		exams.forEach( (key, value) {
-			for (int i = 0; i < value.length; i++) {
-				count++;
-			}
-		});
-
-		return count;
-	}
-
 	static int activateExam(String semester, int unit) {
-		if (!exams.containsKey(semester)) {
-			return 1;
-		}
-
-		if (unit > exams[semester]!.length) {
-			return 2;
-		}
-
-		for (int i = 0; i < exams[semester]!.length; i++) {
-			if (exams[semester]![i].unit == unit) {
-				activeExam = exams[semester]![i];
-			}
-		}
-
+		activeExam = Exam(semester, unit);
 		return 0;
 	}
 

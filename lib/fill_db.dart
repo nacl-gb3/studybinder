@@ -16,7 +16,6 @@ void fillWebAppDB(AppDatabase appDB) async {
 		usersAnswered: ""
 	);
 
-	print(questionEntry.toString());
 	appDB.into(appDB.questions).insert(questionEntry);	
 
 	print(await appDB.select(appDB.questions).get());

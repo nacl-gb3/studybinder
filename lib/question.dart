@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'dart:math';
 import 'appdb.dart';
 import 'tables.dart';
-import 'user.dart';
 
 class Question {
 	String examSemester = "";
@@ -13,7 +12,6 @@ class Question {
 	String explanation = "";
 	String answer = "";
 	List<String> possibleAnswers = [];
-	List<String> usersAnswered = [];
 
 	Question();
 
@@ -26,7 +24,17 @@ class Question {
 		this.explanation = questionEntry.explanation;
 		this.answer = questionEntry.answer;
 		this.possibleAnswers = csvToList(questionEntry.possibleAnswers);
-		this.usersAnswered = csvToList(questionEntry.usersAnswered);
+	}
+
+	Question.fromMap(Map data) {
+		this.examSemester = data["examSemester"];
+		this.examUnit = data["examUnit"];
+		this.questionNum = data["questionNum"];
+		this.type = data["type"];
+		this.given = data["given"];
+		this.explanation = data["explanation"];
+		this.answer = data["answer"];
+		this.possibleAnswers = csvToList(data["possibleAnswers"]);
 	}
 
 	List<String> csvToList(String csv) {
@@ -53,13 +61,5 @@ class Question {
 		return shuffledList;
 	}
 
-	void updateUsersAnswered(User user, AppDatabase db) {
-		if (!usersAnswered.contains(user.name)) { 
-			usersAnswered.add(user.name);
-		}
-	}
 }
-
-
-
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'instance.dart';
 import 'questionpage.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Main Menu'),
@@ -68,13 +69,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
 	@override
 	void initState() {
+		//if (!kIsWeb) {
 		Instance.setCourseDatabase();
+		//}
 		super.initState();
 	}
 
 	@override
 	void dispose() {
+		//if (!kIsWeb) {
 		Instance.onClose();
+		//}
 		super.dispose();
 	}
 

@@ -4,7 +4,7 @@ import 'user.dart';
 import 'question.dart';
 import 'appdb.dart';
 
-Future<Question> getRandomQuestion(User user, AppDatabase db) async {
+Future<Question> getRandomQuestionNative(User user, AppDatabase db) async {
 	List<QuestionEntry> questionEntries = await db.select(db.questions).get();
 	Random rand = Random();
 
@@ -19,7 +19,7 @@ Future<Question> getRandomQuestion(User user, AppDatabase db) async {
 	}
 
 	int index = 0;
-	while (user.excludeAnswered && questions[index].usersAnswered.contains(user.name)) {index++;}
+	//while (user.excludeAnswered && questions[index].usersAnswered.contains(user.name)) {index++;}
 
 	return questions[index];
 }
