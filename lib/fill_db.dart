@@ -1,4 +1,3 @@
-import 'package:http/http.dart' as http;
 import 'appdb.dart';
 
 void fillWebAppDB(AppDatabase appDB) async {

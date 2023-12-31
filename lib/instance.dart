@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
+import 'package:drift_postgres/drift_postgres.dart';
+import 'package:postgres/postgres.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
@@ -17,25 +20,44 @@ class Instance {
 	static AppDatabase? activeCourseDB;
 	static List<User> users = [];
 
-	static void setCourseDatabase() {
+	static void setCourseDatabase() async {
 		if (activeCourseDB != null) {
 			activeCourseDB!.close();
 		}
 
-		activeCourseDB = AppDatabase();
+		bool debug = true;
+
+		if (debug && kIsWeb) {
+			PgDatabase pgDB = PgDatabase(
+				endpoint: Endpoint(
+					host: 'localhost',
+					database: 'postgres',
+					username: 'postgres',
+					password: 'postgres',
+				),
+				settings: const ConnectionSettings(
+					sslMode: SslMode.disable,
+				),
+			);
+			activeCourseDB = AppDatabase.postgres(pgDB);
+			fillWebAppDB(activeCourseDB!);
+			print(await activeCourseDB!.questions.all().get());
+		}
+		else {
+			activeCourseDB = AppDatabase();
+			if (kIsWeb) {
+				fillWebAppDB(activeCourseDB!);
+			}
+		}
 
 		if (activeCourseDB == null) {
 			throw const FileSystemException("Database not found");
-		}
-
-		if (kIsWeb) {
-			fillWebAppDB(activeCourseDB!);
 		}
 	}
 
 	static Future<void> setRandomQuestion() async {
 		//if (!kIsWeb) {
-		activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!);	
+		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
 		//}
 		//else {
 		// HTTP Stuff
