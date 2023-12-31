@@ -4,8 +4,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'package:drift_postgres/drift_postgres.dart';
-import 'package:postgres/postgres.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
@@ -25,33 +23,14 @@ class Instance {
 			activeCourseDB!.close();
 		}
 
-		bool debug = true;
-
-		if (debug && kIsWeb) {
-			PgDatabase pgDB = PgDatabase(
-				endpoint: Endpoint(
-					host: 'localhost',
-					database: 'postgres',
-					username: 'postgres',
-					password: 'postgres',
-				),
-				settings: const ConnectionSettings(
-					sslMode: SslMode.disable,
-				),
-			);
-			activeCourseDB = AppDatabase.postgres(pgDB);
-			fillWebAppDB(activeCourseDB!);
-			print(await activeCourseDB!.questions.all().get());
-		}
-		else {
-			activeCourseDB = AppDatabase();
-			if (kIsWeb) {
-				fillWebAppDB(activeCourseDB!);
-			}
-		}
+		activeCourseDB = AppDatabase();
 
 		if (activeCourseDB == null) {
 			throw const FileSystemException("Database not found");
+		}
+
+		if (kIsWeb) {
+			fillWebAppDB(activeCourseDB!);
 		}
 	}
 
