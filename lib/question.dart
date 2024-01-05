@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
 import 'dart:math';
-import 'appdb.dart';
-import 'tables.dart';
+import 'dart:convert';
+import 'native/appdb.dart';
+import 'native/tables.dart';
 
 class Question {
 	String examSemester = "";
@@ -26,15 +27,16 @@ class Question {
 		this.possibleAnswers = csvToList(questionEntry.possibleAnswers);
 	}
 
-	Question.fromMap(Map data) {
-		this.examSemester = data["examSemester"];
-		this.examUnit = data["examUnit"];
-		this.questionNum = data["questionNum"];
-		this.type = data["type"];
-		this.given = data["given"];
-		this.explanation = data["explanation"];
-		this.answer = data["answer"];
-		this.possibleAnswers = csvToList(data["possibleAnswers"]);
+	Question.fromJson(String jsonString) {
+		Map<String, dynamic> questionMap = json.decode(jsonString); 
+		this.examSemester = questionMap["examSemester"];
+		this.examUnit = questionMap["examUnit"];
+		this.questionNum = questionMap["questionNum"];
+		this.type = questionMap["type"];
+		this.given = questionMap["given"];
+		this.explanation = questionMap["explanation"];
+		this.answer = questionMap["answer"];
+		this.possibleAnswers = csvToList(questionMap["possibleAnswers"]);
 	}
 
 	List<String> csvToList(String csv) {

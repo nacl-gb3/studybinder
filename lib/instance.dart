@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart';
@@ -7,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
-import 'appdb.dart';
-import 'fill_db.dart';
-import 'drift.dart';
+import 'native/appdb.dart';
+import 'native/drift.dart';
+import 'web/server.dart';
 
 class Instance {
 	static User? activeUser;
@@ -23,24 +22,29 @@ class Instance {
 			activeCourseDB!.close();
 		}
 
-		activeCourseDB = AppDatabase();
-
-		if (activeCourseDB == null) {
-			throw const FileSystemException("Database not found");
+		if (kIsWeb) {
+			int statusCode = await initWebDatabase();	
+			if (statusCode != 200) {
+				throw Exception("Web Error $statusCode");
+			}
 		}
 
-		if (kIsWeb) {
-			fillWebAppDB(activeCourseDB!);
+		else {
+			activeCourseDB = AppDatabase();
+
+			if (activeCourseDB == null) {
+				throw const FileSystemException("Database not found");
+			}
 		}
 	}
 
 	static Future<void> setRandomQuestion() async {
-		//if (!kIsWeb) {
-		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
-		//}
-		//else {
-		// HTTP Stuff
-		//}
+		if (kIsWeb) {
+			activeQuestion = await getRandomQuestionWeb();	
+		}
+		else {
+			activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!);	
+		}
 	}
 
 	static bool userLogIn(String username, int id, String password) {

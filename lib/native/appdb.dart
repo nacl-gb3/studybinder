@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'tables.dart';
 import 'database_connection/connection.dart' as connector;
-import 'login.dart';
+import '../login.dart';
 
 part 'appdb.g.dart';
 
