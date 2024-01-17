@@ -249,27 +249,34 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 				"Exam ${Instance.activeQuestion!.examUnit}, Q${Instance.activeQuestion!.questionNum}"),
 			),
 			body: Center(
-				child: Column(
-					mainAxisAlignment: MainAxisAlignment.center,
-					children: <Widget>[
-						Container(
-							color: Colors.cyan,
-							width: 400,
-							height: 200,
-							child: Center(
-								child: Text(
-									Instance.activeQuestion!.given,
-									textAlign: TextAlign.center,
-									style: const TextStyle(
-										color: Colors.black,
-									),
-								),
-							),
-						),
-						for (String option in answerList!) 
-							displayAnswerContainer(option),
-					],
-				),
+				child: ListView(
+                    children: <Widget>[
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                                const Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                ),
+                                Container(
+                                    color: Colors.cyan,
+                                    width: 400,
+                                    height: 200,
+                                    child: Center(
+                                        child: Text(
+                                            Instance.activeQuestion!.given,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                for (String option in answerList!) 
+                                    displayAnswerContainer(option),
+                            ],
+                        ),
+                    ],
+                ),
 			),
 		);
 	}

@@ -65,104 +65,123 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "Press any button to get a question",
-            ),
-			const Padding(
-				padding: EdgeInsets.all(5.0),
-			),
-			ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Colors.blue,
-				),
-				onPressed: () => {
-                    Instance.nextType = null,
-					_enterQuestionView(context),
-				},
-				child: const Text(
-					"Get a question of any type",
-					style: TextStyle(
-						color: Colors.white,
-					),
-				),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-			ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Colors.red,
-				),
-				onPressed: () => {
-                    Instance.nextType = QuestionTypes.freeResponse,
-					_enterQuestionView(context),
-				},
-				child: const Text(
-					"Get a free response question",
-					style: TextStyle(
-						color: Colors.white,
-					),
-				),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-			ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Colors.yellow,
-				),
-				onPressed: () => {
-                    Instance.nextType = QuestionTypes.shortAnswer,
-					_enterQuestionView(context),
-				},
-				child: const Text(
-					"Get a short answer question",
-					style: TextStyle(
-						color: Colors.white,
-					),
-				),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-			ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Colors.green,
-				),
-				onPressed: () => {
-                    Instance.nextType = QuestionTypes.multipleChoice,
-					_enterQuestionView(context),
-				},
-				child: const Text(
-					"Get a multiple choice question",
-					style: TextStyle(
-						color: Colors.white,
-					),
-				),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-			ElevatedButton(
-				style: ElevatedButton.styleFrom(
-					backgroundColor: Colors.orange,
-				),
-				onPressed: () => {
-                    Instance.nextType = QuestionTypes.trueFalse,
-					_enterQuestionView(context),
-				},
-				child: const Text(
-					"Get a true/false question",
-					style: TextStyle(
-						color: Colors.white,
-					),
-				),
-			), // This trailing comma makes auto-formatting nicer for build methods.
-          ],
+        child: ListView(
+            children: <Widget>[
+                Column(
+                // Column is also a layout widget. It takes a list of children and
+                // arranges them vertically. By default, it sizes itself to fit its
+                // children horizontally, and tries to be as tall as its parent.
+                //
+                // Column has various properties to control how it sizes itself and
+                // how it positions its children. Here we use mainAxisAlignment to
+                // center the children vertically; the main axis here is the vertical
+                // axis because Columns are vertical (the cross axis would be
+                // horizontal).
+                //
+                // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+                // action in the IDE, or press "p" in the console), to see the
+                // wireframe for each widget.
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                        const Padding(
+                            padding: EdgeInsets.all(20.0),
+                        ),
+                        const Text(
+                        "Press any button to get a question",
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.all(5.0),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                            ),
+                            onPressed: () => {
+                                Instance.nextType = null,
+                                _enterQuestionView(context),
+                            },
+                            child: const Text(
+                                "Get a question of any type",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                ),
+                            ),
+                        ), // This trailing comma makes auto-formatting nicer for build methods.
+                        const Padding(
+                            padding: EdgeInsets.all(5.0),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                            ),
+                            onPressed: () => {
+                                Instance.nextType = QuestionTypes.freeResponse,
+                                _enterQuestionView(context),
+                            },
+                            child: const Text(
+                                "Get a free response question",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                ),
+                            ),
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.all(5.0),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.yellow,
+                            ),
+                            onPressed: () => {
+                                Instance.nextType = QuestionTypes.shortAnswer,
+                                _enterQuestionView(context),
+                            },
+                            child: const Text(
+                                "Get a short answer question",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                ),
+                            ),
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.all(5.0),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                            ),
+                            onPressed: () => {
+                                Instance.nextType = QuestionTypes.multipleChoice,
+                                _enterQuestionView(context),
+                            },
+                            child: const Text(
+                                "Get a multiple choice question",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                ),
+                            ),
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.all(5.0),
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                            ),
+                            onPressed: () => {
+                                Instance.nextType = QuestionTypes.trueFalse,
+                                _enterQuestionView(context),
+                            },
+                            child: const Text(
+                                "Get a true/false question",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                ),
+                            ),
+                        ),
+                    ],
+                ),
+            ],
         ),
       ),
     );
