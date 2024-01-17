@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../instance.dart';
+import 'package:studybinder/instance.dart';
 
 class MyQuestionPage extends StatefulWidget {
   const MyQuestionPage({super.key, required this.title});
