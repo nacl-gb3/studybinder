@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:studybinder/question.dart';
-import '../instance.dart';
+import 'package:studybinder/classes/question.dart';
+import 'package:studybinder/instance.dart';
 import 'questionpage.dart';
 
 class MyHomePage extends StatefulWidget {

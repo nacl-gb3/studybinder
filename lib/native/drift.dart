@@ -1,7 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'dart:math';
-import '../user.dart';
-import '../question.dart';
+import 'package:studybinder/classes/user.dart';
+import 'package:studybinder/classes/question.dart';
 import 'appdb.dart';
 
 Future<Question> getRandomQuestionNative(User user, AppDatabase db, QuestionTypes? questionType) async {

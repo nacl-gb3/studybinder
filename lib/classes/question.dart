@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:convert';
-import 'native/appdb.dart';
+import 'package:studybinder/native/appdb.dart';
 
 class Question {
 	String examSemester = "";

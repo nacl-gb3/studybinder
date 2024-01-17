@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
-import 'user.dart';
-import 'exam.dart';
-import 'question.dart';
-import 'native/appdb.dart';
-import 'native/drift.dart';
-import 'web/server.dart';
+import 'package:studybinder/classes/user.dart';
+import 'package:studybinder/classes/exam.dart';
+import 'package:studybinder/classes/question.dart';
+import 'package:studybinder/native/appdb.dart';
+import 'package:studybinder/native/drift.dart';
+import 'package:studybinder/web/server.dart';
 
 class Instance {
 	static User? activeUser;
@@ -68,9 +68,9 @@ class Instance {
 		deactivateExam();
 	}
 
-	static int activateExam(String semester, int unit) {
+	static Exam activateExam(String semester, int unit) {
 		activeExam = Exam(semester, unit);
-		return 0;
+		return activeExam!;
 	}
 
 	static void deactivateExam() {

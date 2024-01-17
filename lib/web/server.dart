@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
-import '../question.dart';
-import '../login.dart';
+import 'package:studybinder/classes/question.dart';
+import 'package:studybinder/login.dart';
 
 Future<int> initWebDatabase() async {
     Uri url = Uri.http("localhost:5000", "init/${Login.activeCourse}");
