@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'user.dart';
 import 'exam.dart';
 import 'question.dart';
-import 'appdb.dart';
-import 'fill_db.dart';
-import 'drift.dart';
+import 'native/appdb.dart';
+import 'native/drift.dart';
+import 'web/server.dart';
 
 class Instance {
 	static User? activeUser;
@@ -16,28 +16,39 @@ class Instance {
 	static Question? activeQuestion;
 	static AppDatabase? activeCourseDB;
 	static List<User> users = [];
-	static Map<String, List<Exam>> exams = {};
-	static List<Question> questions = [];
 
-	static void setCourseDatabase() {
+    static QuestionTypes? nextType;
+
+	static void setCourseDatabase() async {
 		if (activeCourseDB != null) {
 			activeCourseDB!.close();
 		}
 
-		activeCourseDB = AppDatabase();
-
-		if (activeCourseDB == null) {
-			throw const FileSystemException("Database not found");
+		if (kIsWeb) {
+			int statusCode = await initWebDatabase();	
+			if (statusCode != 200) {
+				throw Exception("Web Error $statusCode");
+			}
 		}
 
-		print(kIsWeb);
-		if (kIsWeb) {
-			fillWebAppDB(activeCourseDB!);
+		else {
+			activeCourseDB = AppDatabase();
+
+			if (activeCourseDB == null) {
+				throw const FileSystemException("Database not found");
+			}
 		}
 	}
 
 	static Future<void> setRandomQuestion() async {
-		activeQuestion = await getRandomQuestion(User.dummy(), activeCourseDB!);	
+		if (kIsWeb) {
+			activeQuestion = await getRandomQuestionWeb(nextType);	
+		}
+		else {
+			activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!, nextType);	
+		}
+
+        nextType = null;
 	}
 
 	static bool userLogIn(String username, int id, String password) {
@@ -57,42 +68,8 @@ class Instance {
 		deactivateExam();
 	}
 
-	static Exam getRandomExam(Random rand) {
-		Iterable<String> semesters = exams.keys;
-		int index = rand.nextInt(semesters.length);
-		String semester = semesters.elementAt(index);
-		int length = exams[semester]!.length;
-		int examIndex = rand.nextInt(length);
-		return exams[semester]![examIndex];
-	}
-
-	static int getExamCount() {
-		int count = 0;
-
-		exams.forEach( (key, value) {
-			for (int i = 0; i < value.length; i++) {
-				count++;
-			}
-		});
-
-		return count;
-	}
-
 	static int activateExam(String semester, int unit) {
-		if (!exams.containsKey(semester)) {
-			return 1;
-		}
-
-		if (unit > exams[semester]!.length) {
-			return 2;
-		}
-
-		for (int i = 0; i < exams[semester]!.length; i++) {
-			if (exams[semester]![i].unit == unit) {
-				activeExam = exams[semester]![i];
-			}
-		}
-
+		activeExam = Exam(semester, unit);
 		return 0;
 	}
 

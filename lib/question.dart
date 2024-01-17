@@ -1,8 +1,6 @@
-import 'package:drift/drift.dart';
 import 'dart:math';
-import 'appdb.dart';
-import 'tables.dart';
-import 'user.dart';
+import 'dart:convert';
+import 'native/appdb.dart';
 
 class Question {
 	String examSemester = "";
@@ -13,7 +11,9 @@ class Question {
 	String explanation = "";
 	String answer = "";
 	List<String> possibleAnswers = [];
-	List<String> usersAnswered = [];
+
+    static final List<String> QUESTION_TYPES = ["Free Response", "Short Answer", "Multiple Choice", 
+        "True/False"];
 
 	Question();
 
@@ -26,7 +26,18 @@ class Question {
 		this.explanation = questionEntry.explanation;
 		this.answer = questionEntry.answer;
 		this.possibleAnswers = csvToList(questionEntry.possibleAnswers);
-		this.usersAnswered = csvToList(questionEntry.usersAnswered);
+	}
+
+	Question.fromJson(String jsonString) {
+		Map<String, dynamic> questionMap = json.decode(jsonString); 
+		this.examSemester = questionMap["examSemester"];
+		this.examUnit = questionMap["examUnit"];
+		this.questionNum = questionMap["questionNum"];
+		this.type = questionMap["type"];
+		this.given = questionMap["given"];
+		this.explanation = questionMap["explanation"];
+		this.answer = questionMap["answer"];
+		this.possibleAnswers = csvToList(questionMap["possibleAnswers"]);
 	}
 
 	List<String> csvToList(String csv) {
@@ -35,7 +46,7 @@ class Question {
 
 	List<String>? shuffleAnswers() {
 		Random rand = Random();
-		if (this.type != "Multiple Choice") {
+		if (this.type != QUESTION_TYPES[QuestionTypes.multipleChoice.index]) {
 			return null;
 		}
 
@@ -53,13 +64,11 @@ class Question {
 		return shuffledList;
 	}
 
-	void updateUsersAnswered(User user, AppDatabase db) {
-		if (!usersAnswered.contains(user.name)) { 
-			usersAnswered.add(user.name);
-		}
-	}
 }
 
-
-
-
+enum QuestionTypes {
+    freeResponse,
+    shortAnswer,
+    multipleChoice,
+    trueFalse
+}

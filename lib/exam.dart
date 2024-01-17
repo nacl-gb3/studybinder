@@ -7,13 +7,14 @@ class Exam {
 	int unit = -1;
 	List<Question> questions = [];
 
-	//Exam(this.semester, this.unit, this.questions);
+	Exam(this.semester, this.unit);
 
 	Question? getRandomQuestion(User user, bool excludeAnswered) {
-		Random rand = Random();
+		//Random rand = Random();
 		int index = -1;
-		List<int> attemptedIndexes = [];
+		//List<int> attemptedIndexes = [];
 
+		/*
 		if (excludeAnswered) {
 			do {
 				index = rand.nextInt(this.questions.length);
@@ -23,7 +24,7 @@ class Exam {
 			} while (questions[index].usersAnswered.contains(user.name) 
 			&& attemptedIndexes.length < this.questions.length);
 		}
-
+		*/
 	
 		return this.questions[index];
 	}
