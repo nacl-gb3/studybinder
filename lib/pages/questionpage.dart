@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'instance.dart';
+import '../instance.dart';
 
 class MyQuestionPage extends StatefulWidget {
   const MyQuestionPage({super.key, required this.title});
@@ -24,7 +24,7 @@ class _MyQuestionPageState extends State<MyQuestionPage> {
 		Colors.red
 	];
 
-	final Map<String, int> _currentColorIndex = Map();
+	final Map<String, int> _currentColorIndex = {};
 	int currentColorIndex = 0;
 
 	@override

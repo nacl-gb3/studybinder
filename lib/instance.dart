@@ -17,6 +17,8 @@ class Instance {
 	static AppDatabase? activeCourseDB;
 	static List<User> users = [];
 
+    static QuestionTypes? nextType;
+
 	static void setCourseDatabase() async {
 		if (activeCourseDB != null) {
 			activeCourseDB!.close();
@@ -40,11 +42,13 @@ class Instance {
 
 	static Future<void> setRandomQuestion() async {
 		if (kIsWeb) {
-			activeQuestion = await getRandomQuestionWeb();	
+			activeQuestion = await getRandomQuestionWeb(nextType);	
 		}
 		else {
-			activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!);	
+			activeQuestion = await getRandomQuestionNative(User.dummy(), activeCourseDB!, nextType);	
 		}
+
+        nextType = null;
 	}
 
 	static bool userLogIn(String username, int id, String password) {

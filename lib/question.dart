@@ -1,8 +1,6 @@
-import 'package:drift/drift.dart';
 import 'dart:math';
 import 'dart:convert';
 import 'native/appdb.dart';
-import 'native/tables.dart';
 
 class Question {
 	String examSemester = "";
@@ -13,6 +11,9 @@ class Question {
 	String explanation = "";
 	String answer = "";
 	List<String> possibleAnswers = [];
+
+    static final List<String> QUESTION_TYPES = ["Free Response", "Short Answer", "Multiple Choice", 
+        "True/False"];
 
 	Question();
 
@@ -45,7 +46,7 @@ class Question {
 
 	List<String>? shuffleAnswers() {
 		Random rand = Random();
-		if (this.type != "Multiple Choice") {
+		if (this.type != QUESTION_TYPES[QuestionTypes.multipleChoice.index]) {
 			return null;
 		}
 
@@ -65,3 +66,9 @@ class Question {
 
 }
 
+enum QuestionTypes {
+    freeResponse,
+    shortAnswer,
+    multipleChoice,
+    trueFalse
+}

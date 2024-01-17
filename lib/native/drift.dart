@@ -4,8 +4,20 @@ import '../user.dart';
 import '../question.dart';
 import 'appdb.dart';
 
-Future<Question> getRandomQuestionNative(User user, AppDatabase db) async {
-	List<QuestionEntry> questionEntries = await db.select(db.questions).get();
+Future<Question> getRandomQuestionNative(User user, AppDatabase db, QuestionTypes? questionType) async {
+    List<QuestionEntry> questionEntries;
+
+    if (questionType == null) {
+        questionEntries = await db.select(db.questions).get();
+    }
+    else {
+        int typeIndex = questionType.index;
+        String typeString = Question.QUESTION_TYPES[typeIndex];
+        questionEntries = await (db.select(db.questions)
+            ..where((qE) => qE.type.equals(typeString))
+            ).get();
+    }
+
 	Random rand = Random();
 
 	List<Question> questions = [];
