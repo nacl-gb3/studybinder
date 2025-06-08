@@ -19,15 +19,17 @@
           };
         };
         androidSdk = pkgs.androidenv.androidPkgs.androidsdk;
+        buildToolsVersion = "34.0.0";
       in
       {
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.mkShell rec {
           packages = [ ];
           nativeBuildInputs = [ ];
           buildInputs = with pkgs; [
             flutter
             androidsdk
             jdk
+            steam-run
 
             # C libraries
             atk
@@ -60,7 +62,8 @@
               harfbuzz
               pango
             ];
-          ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+          ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+          GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/${buildToolsVersion}/aapt2";
         };
       }
     );
