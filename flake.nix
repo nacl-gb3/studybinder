@@ -19,9 +19,16 @@
           };
         };
         androidSdk = pkgs.androidenv.androidPkgs.androidsdk;
-        buildToolsVersion = "34.0.0";
+        buildToolsVersion = "36.0.0";
       in
       {
+        packages.android-emulator = pkgs.androidenv.emulateApp {
+          name = "emulate-MyAndroidApp";
+          platformVersion = "36";
+          abiVersion = "x86_64"; # mips, x86, x86_64
+          systemImageType = "google_apis";
+        };
+
         devShells.default = pkgs.mkShell rec {
           packages = [ ];
           nativeBuildInputs = [ ];
@@ -29,7 +36,6 @@
             flutter
             androidsdk
             jdk
-            steam-run
 
             # C libraries
             atk
@@ -47,8 +53,9 @@
             pkg-config
             xorg.libX11
             xorg.xorgproto
-          ];
 
+          ];
+          QT_QPA_PLATFORM = "xcb";
           CPATH = "${pkgs.xorg.libX11.dev}/include:${pkgs.xorg.xorgproto}/include";
           LD_LIBRARY_PATH =
             with pkgs;

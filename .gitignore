@@ -49,3 +49,4 @@ lib/paths.dart
 databases/
 .direnv
 .envrc
+result
