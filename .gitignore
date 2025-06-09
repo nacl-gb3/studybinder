@@ -42,7 +42,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/src/main/java
 
 # Other files
 lib/paths.dart
 databases/
+.direnv
+.envrc
+result

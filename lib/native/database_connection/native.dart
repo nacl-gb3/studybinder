@@ -38,7 +38,7 @@ Future<File> getDatabaseFile(String courseName) async {
   // We use `path_provider` to find a suitable path to store our data in.
   final appDir = await getApplicationDocumentsDirectory();
   debugPrint(appDir.toString());
-  final dbPath = p.join(appDir.path, 'studybinder/databases/$courseName.db');
+  final dbPath = p.join(appDir.path, 'sb_questions/databases/$courseName.db');
   debugPrint(dbPath.toString());
   return File(dbPath);
 }
